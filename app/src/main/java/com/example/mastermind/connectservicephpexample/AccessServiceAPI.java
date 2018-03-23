@@ -67,6 +67,8 @@ public class AccessServiceAPI{
          * @return
          */
         public JSONObject convertJSONString2Obj(String jsonString) {
+
+            System.out.println(jsonString);
             JSONObject jObj = null;
             try {
                 Log.w("convertJSONString2Obj", "JsonString=" + jsonString);
@@ -88,6 +90,7 @@ public class AccessServiceAPI{
                 throws IOException
         {
             JSONArray jsonArray = null;
+            String json = null;
             String jsonString = null;
             HttpURLConnection conn = null;
             String line;
@@ -107,7 +110,7 @@ public class AccessServiceAPI{
             // constructs the POST body using the parameters
             while (iterator.hasNext())
             {
-                Map.Entry<String, String> param = iterator.next();
+                Map.Entry<String,String> param = iterator.next();
                 bodyBuilder.append(param.getKey()).append('=')
                         .append(param.getValue());
                 if (iterator.hasNext()) {
@@ -139,6 +142,7 @@ public class AccessServiceAPI{
                 }
 
                 BufferedReader  bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                Log.d("json",bufferedReader.toString());
                 StringBuilder stringBuilder = new StringBuilder();
 
 
@@ -146,8 +150,9 @@ public class AccessServiceAPI{
                 {
                     stringBuilder.append(line + '\n');
                 }
-
-                jsonString = stringBuilder.toString();
+                Log.d("json",stringBuilder.toString());
+                json = stringBuilder.toString();
+                jsonString = json.substring(json.indexOf("{"), json.lastIndexOf("}") + 1);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (ProtocolException e) {
@@ -157,8 +162,9 @@ public class AccessServiceAPI{
             } finally {
                 conn.disconnect();
             }
-
+            Log.d("json",jsonString);
             return jsonString;
+
         }
 
 

@@ -65,10 +65,11 @@ public class LoginActivity extends Activity {
             param.put("action", "login");
             param.put("username", params[0]);
             param.put("password", params[1]);
+            System.out.println(params[0] + params[1]);
 
             JSONObject jObjResult;
             try {
-                jObjResult = m_ServiceAccess.convertJSONString2Obj(m_ServiceAccess.getJSONStringWithParam_POST(Common.SERVICE_API_URL,param));
+                jObjResult = m_ServiceAccess.convertJSONString2Obj(m_ServiceAccess.getJSONStringWithParam_POST(Common.SERVICE_API_URL1,param));
                 return jObjResult.getInt("result");
             }catch (Exception e){
                 return Common.RESULT_ERROR;

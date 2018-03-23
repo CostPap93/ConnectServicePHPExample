@@ -73,7 +73,7 @@ public class RegisterActivity extends Activity{
             postParam.put("password", params[1]);
 
             try {
-                String jsonString = m_AccessServiceAPI.getJSONStringWithParam_POST(Common.SERVICE_API_URL,postParam);
+                String jsonString = m_AccessServiceAPI.getJSONStringWithParam_POST(Common.SERVICE_API_URL1,postParam);
                 JSONObject jsonObject = new JSONObject(jsonString);
                 return jsonObject.getInt("result");
             }catch (Exception e){
