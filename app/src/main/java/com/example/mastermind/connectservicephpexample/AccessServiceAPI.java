@@ -151,8 +151,8 @@ public class AccessServiceAPI{
                     stringBuilder.append(line + '\n');
                 }
                 Log.d("json",stringBuilder.toString());
-                json = stringBuilder.toString();
-                jsonString = json.substring(json.indexOf("{"), json.lastIndexOf("}") + 1);
+                jsonString = stringBuilder.toString();
+
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (ProtocolException e) {

@@ -10,15 +10,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".LoginActivity">
-            <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER">
 
-                </category>
-                <action android:name="android.intent.action.MAIN"/>
-            </intent-filter>
         </activity>
         <activity android:name=".RegisterActivity"/>
-        <activity android:name=".WelcomeActivity"/>
+        <activity android:name=".WelcomeActivity">
+        <intent-filter>
+            <category android:name="android.intent.category.LAUNCHER">
+
+            </category>
+            <action android:name="android.intent.action.MAIN"/>
+        </intent-filter>
+    </activity>
+
     </application>
 
 

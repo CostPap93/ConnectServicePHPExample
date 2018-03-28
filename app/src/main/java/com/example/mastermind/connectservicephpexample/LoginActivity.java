@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -52,7 +53,7 @@ public class LoginActivity extends Activity {
     }
 
     public class TaskLogin extends AsyncTask<String,Void,Integer>{
-
+        private int id;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -70,7 +71,10 @@ public class LoginActivity extends Activity {
             JSONObject jObjResult;
             try {
                 jObjResult = m_ServiceAccess.convertJSONString2Obj(m_ServiceAccess.getJSONStringWithParam_POST(Common.SERVICE_API_URL1,param));
+                id = (jObjResult.getInt("id"));
+
                 return jObjResult.getInt("result");
+
             }catch (Exception e){
                 return Common.RESULT_ERROR;
             }
@@ -83,6 +87,7 @@ public class LoginActivity extends Activity {
             if(Common.RESULT_SUCCESS==integer){
                 Toast.makeText(getApplicationContext(),"Login Success",Toast.LENGTH_LONG).show();
                 Intent i = new Intent(getApplicationContext(),WelcomeActivity.class);
+                i.putExtra("id", id);
                 i.putExtra("username",txtUsername.getText().toString());
                 startActivity(i);
             }

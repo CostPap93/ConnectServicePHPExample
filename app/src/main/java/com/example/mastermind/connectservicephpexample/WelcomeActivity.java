@@ -9,12 +9,16 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +28,7 @@ import java.util.Map;
 
 public class WelcomeActivity extends Activity{
     TextView tvWelcome;
+    TextView tvResult;
     private EditText txt_name;
     private EditText txt_description;
     private EditText txt_category;
@@ -37,27 +42,20 @@ public class WelcomeActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         tvWelcome = findViewById(R.id.tv_welcome);
-        tvWelcome.setText("Welcome: " +  getIntent().getStringExtra("username"));
-        txt_name = findViewById(R.id.txt_name);
-        txt_description = findViewById(R.id.txt_description);
-        txt_category = findViewById(R.id.txt_category);
-        txt_image = findViewById(R.id.txt_image);
-        txt_startdate = findViewById(R.id.txt_startdate);
+        String id = String.valueOf(getIntent().getIntExtra("id" ,0));
+        tvWelcome.setText("Welcome: " +  getIntent().getStringExtra("username") +" with id:  " + id);
         m_AccessServiceAPI = new AccessServiceAPI();
+        tvResult = findViewById(R.id.tv_seminar);
+
+        new TaskShow().execute();
+
+
 
     }
 
     public void btnAddSeminarClicked(View view){
         if("".equals(txt_name.getText().toString())){
             txt_name.setError("Name is required");
-            return;
-        }
-        if("".equals(txt_description.getText().toString())){
-            txt_description.setError("Description is required");
-            return;
-        }
-        if("".equals(txt_category.getText().toString())){
-            txt_category.setError("Category is required");
             return;
         }
         if("".equals(txt_image.getText().toString())){
@@ -179,6 +177,43 @@ public class WelcomeActivity extends Activity{
                 return Common.RESULT_ERROR;
             }
 
+        }
+    }
+
+    public class TaskShow extends  AsyncTask<String,Void,Seminar> {
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected void onPostExecute(Seminar seminar) {
+            Toast.makeText(WelcomeActivity.this, "Show sem success", Toast.LENGTH_LONG).show();
+
+            tvResult.setText(seminar.getName() + seminar.getDate() + seminar.getImage() );
+
+        }
+
+        @Override
+        protected Seminar doInBackground(String... params) {
+            Map<String, String> postParam = new HashMap<>();
+            postParam.put("action", "showsem");
+            Seminar s = new Seminar();
+            try {
+                String jsonString = m_AccessServiceAPI.getJSONStringWithParam_POST(Common.SERVICE_API_URL2, postParam);
+                JSONObject jsonObject = new JSONObject(jsonString);
+                s.setName(jsonObject.getString("seminarname"));
+                s.setDate(jsonObject.getString("startdate"));
+                s.setImage(jsonObject.getString("image"));
+
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return s;
         }
     }
 }
